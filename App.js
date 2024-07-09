@@ -1,9 +1,20 @@
+import React from "react";
 import { StatusBar } from "expo-status-bar";
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  useWindowDimensions,
+} from "react-native";
 import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import { Image } from "expo-image";
 
 export default function App() {
+  const { width, height } = useWindowDimensions();
+  const isLandscape = width > height;
+
   return (
     <SafeAreaProvider>
       <ScrollView>
@@ -13,8 +24,14 @@ export default function App() {
             <Text style={styles.navigationMenues}>Gallery</Text>
             <Text style={styles.navigationMenues}>Contact</Text>
           </View>
-          <View style={styles.main}>
-            <View style={styles.mainUpperPart}>
+          <View style={isLandscape ? styles.mainLandscape : styles.main}>
+            <View
+              style={
+                isLandscape
+                  ? styles.textContainerLandscape
+                  : styles.mainUpperPart
+              }
+            >
               <Text style={styles.heading}>Cats 🐱</Text>
               <Text style={styles.subHeading}>
                 Everything you need to know about Cats
@@ -34,15 +51,15 @@ export default function App() {
             </View>
             <Image
               source="https://images.unsplash.com/photo-1511044568932-338cba0ad803?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-              style={styles.image}
+              style={isLandscape ? styles.imageLandscape : styles.image}
             />
-            <Pressable
-              onPress={() => console.log("pressed")}
-              style={styles.button}
-            >
-              <Text style={styles.buttonText}>Go to Gallery</Text>
-            </Pressable>
           </View>
+          <Pressable
+            onPress={() => console.log("pressed")}
+            style={styles.button}
+          >
+            <Text style={styles.buttonText}>Go to Gallery</Text>
+          </Pressable>
           <View style={styles.footer}>
             <Text style={styles.footerMenues}>Datenschutz</Text>
             <Text style={styles.footerMenues}>Impressum</Text>
@@ -84,6 +101,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 20,
   },
+  mainLandscape: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: 10,
+  },
+  textContainerLandscape: {
+    width: "50%",
+    paddingRight: 10,
+  },
   mainUpperPart: {
     height: 300,
     alignItems: "center",
@@ -97,10 +124,19 @@ const styles = StyleSheet.create({
     borderWidth: 5,
     borderRadius: 20,
   },
+  imageLandscape: {
+    width: 220,
+    height: 220,
+    borderWidth: 5,
+    borderRadius: 20,
+    marginLeft: 10,
+  },
   button: {
     backgroundColor: "orange",
     padding: 15,
     borderRadius: 20,
+    margin: 20,
+    alignSelf: "center",
   },
   buttonText: {
     fontSize: 20,
